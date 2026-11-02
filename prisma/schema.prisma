@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:../data/3dhub.db"
+}
+
+model Filament {
+  id            Int      @id @default(autoincrement())
+  brand         String
+  material      String   // PLA, PETG, ABS, TPU, etc.
+  color         String
+  colorHex      String?
+  initialWeight Int      // grams
+  currentWeight Int      // grams
+  spoolWeight   Int      @default(200) // weight of empty spool in grams
+  notes         String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  printJobs PrintJob[]
+}
+
+model PrintJob {
+  id               Int       @id @default(autoincrement())
+  bambuJobId       String?   // job id from printer
+  fileName         String
+  status           String    // completed, failed, cancelled
+  filamentUsedGrams Int?     // grams consumed
+  durationSeconds  Int?      // print time in seconds
+  startedAt        DateTime?
+  finishedAt       DateTime?
+  createdAt        DateTime  @default(now())
+
+  pendingDeduction String?  // JSON: [{colorHex, grams, filamentId, filamentLabel}]
+
+  filamentId Int?
+  filament   Filament? @relation(fields: [filamentId], references: [id])
+  issues     Issue[]
+}
+
+model Issue {
+  id          Int       @id @default(autoincrement())
+  type        String    // hms (from printer) | manual
+  severity    String    // error | warning | info
+  code        String?   // HMS code e.g. "0700_1000_0001_0001"
+  title       String
+  description String?
+  status      String    @default("open") // open | tracking | resolved
+  resolvedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  printJobId  Int?
+  printJob    PrintJob? @relation(fields: [printJobId], references: [id])
+}
+
+model PrinterConfig {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+model ModelTag {
+  id        Int      @id @default(autoincrement())
+  fileName  String
+  tag       String
+  createdAt DateTime @default(now())
+
+  @@unique([fileName, tag])
+}
