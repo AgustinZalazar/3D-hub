@@ -15,10 +15,11 @@ export function EditFilamentModal({ filament }: { filament: Filament }) {
     brand:         filament.brand,
     material:      filament.material,
     color:         filament.color,
-    colorHex:      filament.colorHex,
+    colorHex:      filament.colorHex ?? "#22c55e",
     initialWeight: String(filament.initialWeight),
     currentWeight: String(filament.currentWeight),
     spoolWeight:   String(filament.spoolWeight),
+    pricePerKg:    filament.pricePerKg != null ? String(filament.pricePerKg) : "",
     notes:         filament.notes ?? "",
   });
 
@@ -29,10 +30,11 @@ export function EditFilamentModal({ filament }: { filament: Filament }) {
       brand:         filament.brand,
       material:      filament.material,
       color:         filament.color,
-      colorHex:      filament.colorHex,
+      colorHex:      filament.colorHex ?? "#22c55e",
       initialWeight: String(filament.initialWeight),
       currentWeight: String(filament.currentWeight),
       spoolWeight:   String(filament.spoolWeight),
+      pricePerKg:    filament.pricePerKg != null ? String(filament.pricePerKg) : "",
       notes:         filament.notes ?? "",
     });
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setIsOpen(false); };
@@ -181,6 +183,27 @@ export function EditFilamentModal({ filament }: { filament: Filament }) {
                     min="0"
                     className="field-input"
                   />
+                </Field>
+
+                <Field label="Precio por kg" hint="opcional">
+                  <div className="relative">
+                    <input
+                      type="number"
+                      value={form.pricePerKg}
+                      onChange={(e) => set("pricePerKg", e.target.value)}
+                      placeholder="0"
+                      min="0"
+                      step="any"
+                      className="field-input"
+                      style={{ paddingRight: "42px" }}
+                    />
+                    <span
+                      className="absolute right-3 top-1/2 -translate-y-1/2"
+                      style={{ fontSize: "12px", color: "var(--t3)", pointerEvents: "none" }}
+                    >
+                      $/kg
+                    </span>
+                  </div>
                 </Field>
 
                 <Field label="Notas">

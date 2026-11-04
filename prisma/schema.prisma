@@ -16,6 +16,7 @@ model Filament {
   initialWeight Int      // grams
   currentWeight Int      // grams
   spoolWeight   Int      @default(200) // weight of empty spool in grams
+  pricePerKg    Float?   // cost in local currency per kg
   notes         String?
   isActive      Boolean  @default(true)
   createdAt     DateTime @default(now())
@@ -72,4 +73,65 @@ model ModelTag {
   createdAt DateTime @default(now())
 
   @@unique([fileName, tag])
+}
+
+model PrinterProfile {
+  id             Int      @id @default(autoincrement())
+  name           String
+  wattage        Float    @default(65)    // real watts consumption
+  kwHPrice       Float    @default(0)     // price per kWh in local currency
+  lifeHours      Int      @default(5000)  // printer expected life in hours
+  partsPrice     Float    @default(0)     // replacement parts cost
+  errorMarginPct Float    @default(15)    // error margin percentage
+  isDefault      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  quotes ProductQuote[]
+}
+
+model ProductQuote {
+  id        Int      @id @default(autoincrement())
+  name      String
+
+  // Model files (optional, JSON array of .3mf filenames)
+  modelFiles String?
+
+  // Filaments snapshot: [{filamentId?, label, pricePerKg, grams}]
+  filamentsData String @default("[]")
+
+  // Print time
+  printHours   Float @default(0)
+  printMinutes Float @default(0)
+
+  // Printer config (snapshot at save time)
+  printerProfileId Int?
+  printerProfile   PrinterProfile? @relation(fields: [printerProfileId], references: [id])
+  wattage          Float @default(65)
+  kwHPrice         Float @default(0)
+  lifeHours        Int   @default(5000)
+  partsPrice       Float @default(0)
+  errorMarginPct   Float @default(15)
+
+  // External materials: [{name, price}]
+  externalMaterials String @default("[]")
+
+  // Fixed costs (design, post-processing, etc.)
+  fixedCosts Float @default(0)
+
+  // Profit
+  profitMode  String @default("multiplier") // multiplier | percentage
+  profitValue Float  @default(4)
+
+  // Sale commission
+  commissionPct Float @default(0)
+
+  // Computed results (snapshot)
+  productionCost   Float?
+  totalCost        Float?
+  salePrice        Float?
+  salePriceWithFee Float?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

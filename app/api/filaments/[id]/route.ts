@@ -30,6 +30,7 @@ export async function PATCH(
       initialWeight: body.initialWeight !== undefined ? parseFloat(body.initialWeight) : undefined,
       currentWeight: body.currentWeight !== undefined ? parseFloat(body.currentWeight) : undefined,
       spoolWeight:   body.spoolWeight   !== undefined ? parseFloat(body.spoolWeight)   : undefined,
+      pricePerKg:    body.pricePerKg !== undefined ? (body.pricePerKg ? parseFloat(body.pricePerKg) : null) : undefined,
       notes:         body.notes         !== undefined ? body.notes : undefined,
     },
   });

@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
     const data = zip.readFile(entry);
     if (!data) return new NextResponse(null, { status: 404 });
 
-    return new NextResponse(data, {
+    return new NextResponse(data as unknown as BodyInit, {
       headers: {
         "Content-Type": "image/png",
         "Cache-Control": "public, max-age=3600",

@@ -323,8 +323,8 @@ export function ModelGrid({ models }: { models: ModelMetadata[] }) {
                     <div className="flex items-center gap-2 flex-wrap">
                       {model.filaments.map((f, i) => (
                         <div key={i} className="flex items-center gap-1">
-                          <span className="rounded-full flex-shrink-0" style={{ width: "10px", height: "10px", background: f.colorHex, border: "1.5px solid var(--border)" }} title={`${f.material} ${f.colorHex} · ${f.grams.toFixed(1)}g`} />
-                          <span className="num-tabular" style={{ fontSize: "11px", color: "var(--t3)" }}>{f.grams.toFixed(0)}g</span>
+                          <span className="rounded-full flex-shrink-0" style={{ width: "10px", height: "10px", background: f.colorHex, border: "1.5px solid var(--border)" }} title={`${f.material} ${f.colorHex}${f.grams > 0 ? ` · ${f.grams.toFixed(1)}g` : ""}`} />
+                          {f.grams > 0 && <span className="num-tabular" style={{ fontSize: "11px", color: "var(--t3)" }}>{f.grams.toFixed(0)}g</span>}
                         </div>
                       ))}
                     </div>
@@ -332,12 +332,18 @@ export function ModelGrid({ models }: { models: ModelMetadata[] }) {
 
                   {/* Stats + open */}
                   <div className="flex items-center gap-2 pt-2 mt-auto" style={{ borderTop: "1px solid var(--border-subtle)" }}>
-                    <span className="num-tabular" style={{ fontSize: "12px", color: "var(--t2)", fontWeight: 500 }}>
-                      {model.totalGrams > 0 ? `${model.totalGrams.toFixed(0)}g` : "—"}
-                    </span>
-                    <span style={{ fontSize: "12px", color: "var(--t3)" }}>
-                      {model.estimatedSeconds ? formatTime(model.estimatedSeconds) : "—"}
-                    </span>
+                    {model.totalGrams > 0 ? (
+                      <span className="num-tabular" style={{ fontSize: "12px", color: "var(--t2)", fontWeight: 500 }}>
+                        {model.totalGrams.toFixed(0)}g
+                      </span>
+                    ) : (
+                      <span style={{ fontSize: "11px", color: "var(--t3)", fontStyle: "italic" }}>sin slicear</span>
+                    )}
+                    {model.estimatedSeconds && (
+                      <span style={{ fontSize: "12px", color: "var(--t3)" }}>
+                        {formatTime(model.estimatedSeconds)}
+                      </span>
+                    )}
                     {model.layerHeight && (
                       <span style={{ fontSize: "11px", color: "var(--t3)" }}>{model.layerHeight}mm</span>
                     )}

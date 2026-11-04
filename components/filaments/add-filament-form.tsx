@@ -17,6 +17,7 @@ export function AddFilamentForm({ onSuccess }: { onSuccess?: () => void }) {
     initialWeight: "1000",
     currentWeight: "",
     spoolWeight: "200",
+    pricePerKg: "",
     notes: "",
   });
 
@@ -32,7 +33,7 @@ export function AddFilamentForm({ onSuccess }: { onSuccess?: () => void }) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
-    setForm({ brand: "", material: "PLA", color: "", colorHex: "#22c55e", initialWeight: "1000", currentWeight: "", spoolWeight: "200", notes: "" });
+    setForm({ brand: "", material: "PLA", color: "", colorHex: "#22c55e", initialWeight: "1000", currentWeight: "", spoolWeight: "200", pricePerKg: "", notes: "" });
     router.refresh();
     setLoading(false);
     onSuccess?.();
@@ -147,6 +148,27 @@ export function AddFilamentForm({ onSuccess }: { onSuccess?: () => void }) {
             min="0"
             className="field-input"
           />
+        </Field>
+
+        <Field label="Precio por kg" hint="opcional">
+          <div className="relative">
+            <input
+              type="number"
+              value={form.pricePerKg}
+              onChange={(e) => set("pricePerKg", e.target.value)}
+              placeholder="0"
+              min="0"
+              step="any"
+              className="field-input"
+              style={{ paddingRight: "42px" }}
+            />
+            <span
+              className="absolute right-3 top-1/2 -translate-y-1/2"
+              style={{ fontSize: "12px", color: "var(--t3)", pointerEvents: "none" }}
+            >
+              $/kg
+            </span>
+          </div>
         </Field>
 
         <Field label="Notas">
