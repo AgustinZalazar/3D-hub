@@ -216,7 +216,7 @@ export function EditFilamentModal({ filament }: { filament: Filament }) {
                   />
                 </Field>
 
-                <button type="submit" disabled={loading} className="btn-primary" style={{ marginTop: "4px" }}>
+                <button type="submit" disabled={loading} className="btn-primary w-full" style={{ marginTop: "4px" }}>
                   {loading ? "Guardando..." : "Guardar cambios"}
                 </button>
               </form>

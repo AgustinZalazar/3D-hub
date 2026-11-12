@@ -15,11 +15,11 @@
   --t2:            oklch(0.420 0.012 265);
   --t3:            oklch(0.620 0.008 265);
 
-  /* Accent — violet */
-  --accent:        oklch(0.500 0.220 288);
-  --accent-bg:     oklch(0.960 0.028 288);
-  --accent-border: oklch(0.845 0.065 288);
-  --accent-text:   oklch(0.460 0.200 288);
+  /* Accent — bordo */
+  --accent:        oklch(0.420 0.130 10);
+  --accent-bg:     oklch(0.960 0.018 10);
+  --accent-border: oklch(0.830 0.055 10);
+  --accent-text:   oklch(0.380 0.120 10);
 
   /* Status */
   --success:       oklch(0.560 0.155 155);
@@ -80,14 +80,14 @@ body {
 }
 .field-input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px oklch(0.500 0.220 288 / 0.12);
+  box-shadow: 0 0 0 3px oklch(0.420 0.130 10 / 0.12);
 }
 .field-input::placeholder { color: var(--t3); }
 
 .btn-primary {
-  width: 100%;
+  width: fit-content;
   background: var(--accent);
-  color: oklch(0.98 0.004 288);
+  color: oklch(0.98 0.004 10);
   border: none;
   border-radius: var(--r-sm);
   padding: 9px 16px;

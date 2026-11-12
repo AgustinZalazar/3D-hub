@@ -116,6 +116,9 @@ model ProductQuote {
   // External materials: [{name, price}]
   externalMaterials String @default("[]")
 
+  // Color variants: [{id, label, filamentOverrides: [{rowId, filamentId, pricePerKg}]}]
+  colorVariants String?
+
   // Fixed costs (design, post-processing, etc.)
   fixedCosts Float @default(0)
 
@@ -134,4 +137,65 @@ model ProductQuote {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  catalogEntries CatalogItemEntry[]
+}
+
+model CatalogItem {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  photo       String?  // relative path e.g. /catalog-images/abc.jpg
+  price         Float?   // manual override; null = derived from quotes sum
+  colorVariants String?  // JSON: [{id, label, price}]
+  isPublished Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  entries CatalogItemEntry[]
+}
+
+model CatalogItemEntry {
+  id            Int          @id @default(autoincrement())
+  catalogItemId Int
+  quoteId       Int
+  quantity      Int          @default(1)
+  catalogItem   CatalogItem  @relation(fields: [catalogItemId], references: [id], onDelete: Cascade)
+  quote         ProductQuote @relation(fields: [quoteId], references: [id])
+
+  @@unique([catalogItemId, quoteId])
+}
+
+model Client {
+  id        Int      @id @default(autoincrement())
+  name      String
+  phone     String?
+  email     String?
+  address   String?
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sales Sale[]
+}
+
+model Sale {
+  id       Int    @id @default(autoincrement())
+  clientId Int
+  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  // presupuestado | confirmado | en_produccion | listo | entregado | cancelado
+  status String @default("confirmado")
+
+  // [{name, quantity, unitPrice, colorVariant?, catalogItemId?}]
+  items String @default("[]")
+
+  totalAmount Float @default(0)
+  paidAmount  Float @default(0)
+
+  notes       String?
+  deliveredAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

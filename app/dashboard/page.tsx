@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/db/client";
-import { Clock, Printer, Package, AlertTriangle } from "lucide-react";
+import { Clock, Printer, Package, AlertTriangle, Users, ShoppingBag } from "lucide-react";
 import { PrintStatusCard } from "@/components/dashboard/print-status-card";
 
 async function getStats() {
-  const [totalJobs, completedJobs, filaments, openIssues, durationAgg] = await Promise.all([
+  const [totalJobs, completedJobs, filaments, openIssues, durationAgg, totalClients, salesActive, salesDelivered] = await Promise.all([
     prisma.printJob.count(),
     prisma.printJob.count({ where: { status: "completed" } }),
     prisma.filament.findMany({ where: { isActive: true } }),
@@ -12,13 +12,16 @@ async function getStats() {
       _sum: { durationSeconds: true },
       where: { status: "completed" },
     }),
+    prisma.client.count(),
+    prisma.sale.count({ where: { status: { notIn: ["entregado", "cancelado"] } } }),
+    prisma.sale.count({ where: { status: "entregado" } }),
   ]);
 
   const totalHours = Math.round((durationAgg._sum.durationSeconds ?? 0) / 3600);
   const successRate = totalJobs > 0 ? Math.round((completedJobs / totalJobs) * 100) : null;
   const lowFilaments = filaments.filter((f) => f.currentWeight < 200);
 
-  return { totalHours, totalJobs, completedJobs, successRate, filaments, lowFilaments, openIssues };
+  return { totalHours, totalJobs, completedJobs, successRate, filaments, lowFilaments, openIssues, totalClients, salesActive, salesDelivered };
 }
 
 function greeting() {
@@ -81,6 +84,30 @@ export default async function DashboardPage() {
           value={stats.openIssues}
           sub={stats.openIssues === 0 ? "sin problemas activos" : "requieren atención"}
           warn={stats.openIssues > 0}
+        />
+      </div>
+
+      {/* Clientes & Pedidos */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+        <StatCard
+          icon={Users}
+          label="Clientes"
+          value={stats.totalClients}
+          sub={stats.totalClients === 0 ? "ninguno registrado aún" : "registrados"}
+        />
+        <StatCard
+          icon={ShoppingBag}
+          label="Pedidos en curso"
+          value={stats.salesActive}
+          sub={stats.salesActive === 0 ? "nada pendiente" : "activos ahora"}
+          warn={stats.salesActive > 0}
+          warnColor="accent"
+        />
+        <StatCard
+          icon={ShoppingBag}
+          label="Pedidos entregados"
+          value={stats.salesDelivered}
+          sub="completados en total"
         />
       </div>
 
@@ -176,6 +203,7 @@ function StatCard({
   suffix = "",
   sub,
   warn = false,
+  warnColor = "warning",
 }: {
   icon: React.ElementType;
   label: string;
@@ -183,28 +211,23 @@ function StatCard({
   suffix?: string;
   sub?: string;
   warn?: boolean;
+  warnColor?: "warning" | "accent";
 }) {
+  const active = warn && value > 0;
+  const color = active ? (warnColor === "accent" ? "var(--accent)" : "var(--warning)") : "var(--t1)";
+  const iconColor = active ? (warnColor === "accent" ? "var(--accent)" : "var(--warning)") : "var(--border)";
+
   return (
     <div className="card px-5 py-5">
       <div className="flex items-center justify-between mb-3">
         <p style={{ fontSize: "12px", fontWeight: 500, color: "var(--t3)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
           {label}
         </p>
-        <Icon
-          size={14}
-          strokeWidth={1.8}
-          style={{ color: warn && value > 0 ? "var(--warning)" : "var(--border)" }}
-        />
+        <Icon size={14} strokeWidth={1.8} style={{ color: iconColor }} />
       </div>
       <p
         className="num-tabular"
-        style={{
-          fontSize: "36px",
-          fontWeight: 700,
-          lineHeight: 1,
-          letterSpacing: "-0.03em",
-          color: warn && value > 0 ? "var(--warning)" : "var(--t1)",
-        }}
+        style={{ fontSize: "36px", fontWeight: 700, lineHeight: 1, letterSpacing: "-0.03em", color }}
       >
         {value}<span style={{ fontSize: "20px", fontWeight: 600, letterSpacing: "-0.02em" }}>{suffix}</span>
       </p>

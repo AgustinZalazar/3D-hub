@@ -4,7 +4,7 @@ Local management hub for a Bambu Lab A1 Mini (no AMS). Runs entirely on your loc
 
 ## Features
 
-- **Dashboard** — live print status card with elapsed time, animated printer SVG, and filament info
+- **Dashboard** — live print status, filament alerts, open issues, and sales overview (active orders + delivered)
 - **Filament stock** — track multiple spools with spool visualization, current weight, and per-material stats
 - **Automatic deduction** — when a print finishes, a modal shows what was used (per color when possible) and deducts from stock after confirmation
 - **Models** — browse your `.3mf` files with thumbnails extracted from the files, filter by material and tags, open directly in Bambu Studio
@@ -12,6 +12,8 @@ Local management hub for a Bambu Lab A1 Mini (no AMS). Runs entirely on your loc
 - **Cost calculator** — quote any product using your `.3mf` files: select a model, fill filament prices and printer config, get a sale price with margin
 - **Auto-slice** — click "Slicear" on any unsliced model to run Bambu Studio in headless mode and extract per-plate time and grams automatically (no manual data entry)
 - **Printer profiles** — save and reuse wattage, kWh price, and wear cost per printer configuration
+- **Catalog** — publish products with photos and color variants; prices derived automatically from saved quotes
+- **Clients & Sales** — register clients, create sales from catalog products (autocomplete search), track status (presupuestado → confirmado → en producción → listo → entregado), and monitor pending payments
 
 ## How it works
 

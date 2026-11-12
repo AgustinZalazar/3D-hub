@@ -2,14 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Package, AlertTriangle, Layers, Box, Calculator, ShoppingBag } from "lucide-react";
+import { LayoutDashboard, Package, AlertTriangle, Layers, Box, Calculator, ShoppingBag, BookOpen, Users } from "lucide-react";
 
 const nav = [
   { href: "/dashboard",   label: "Dashboard",    icon: LayoutDashboard },
   { href: "/filaments",   label: "Filamentos",   icon: Package },
   { href: "/models",      label: "Modelos",      icon: Box },
   { href: "/calculator",  label: "Calculadora",  icon: Calculator },
-  { href: "/products",    label: "Productos",    icon: ShoppingBag },
+  { href: "/products",    label: "Cotizaciones", icon: ShoppingBag },
+  { href: "/catalog",     label: "Catálogo",     icon: BookOpen },
+  { href: "/clients",     label: "Clientes",     icon: Users },
   { href: "/issues",      label: "Issues",       icon: AlertTriangle },
 ];
 

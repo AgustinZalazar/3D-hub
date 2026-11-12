@@ -95,7 +95,7 @@ export function AddIssueForm() {
           />
         </div>
 
-        <button type="submit" disabled={loading} className="btn-primary" style={{ marginTop: "4px" }}>
+        <button type="submit" disabled={loading} className="btn-primary w-full" style={{ marginTop: "4px" }}>
           {loading ? "Guardando..." : "Registrar issue"}
         </button>
       </form>

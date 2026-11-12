@@ -181,7 +181,7 @@ export function AddFilamentForm({ onSuccess }: { onSuccess?: () => void }) {
           />
         </Field>
 
-        <button type="submit" disabled={loading} className="btn-primary" style={{ marginTop: "4px" }}>
+        <button type="submit" disabled={loading} className="btn-primary w-full" style={{ marginTop: "4px" }}>
           {loading ? "Guardando..." : "Agregar filamento"}
         </button>
       </form>
