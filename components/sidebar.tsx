@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Package, AlertTriangle, Layers, Box, Calculator, ShoppingBag, BookOpen, Users } from "lucide-react";
+import { LayoutDashboard, Package, AlertTriangle, Layers, Box, Calculator, ShoppingBag, BookOpen, Users, TrendingUp } from "lucide-react";
 
 const nav = [
   { href: "/dashboard",   label: "Dashboard",    icon: LayoutDashboard },
@@ -12,6 +12,7 @@ const nav = [
   { href: "/products",    label: "Cotizaciones", icon: ShoppingBag },
   { href: "/catalog",     label: "Catálogo",     icon: BookOpen },
   { href: "/clients",     label: "Clientes",     icon: Users },
+  { href: "/ventas",      label: "Ventas",        icon: TrendingUp },
   { href: "/issues",      label: "Issues",       icon: AlertTriangle },
 ];
 
